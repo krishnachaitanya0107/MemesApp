@@ -1,8 +1,8 @@
 # Memes_App
 
 # About
-A Simple App through which we can view memes and share memes with others .
-Made using Volley and Glide Library , also used https://meme-api.herokuapp.com/gimme for memes data .
+An Android App through which we can view and share memes with others .
+Made using Volley and Glide Library , also used https://meme-api.herokuapp.com/gimme API for generating a random meme image or gif everytime .
 
 # Tech / Frameworks used
 - Android studio
