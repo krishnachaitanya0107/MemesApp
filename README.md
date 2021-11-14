@@ -1,4 +1,4 @@
-# Memes_App
+# Memes App
 
 # About
 An Android App through which we can view and share memes with others .
