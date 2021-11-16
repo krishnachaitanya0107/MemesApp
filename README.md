@@ -4,8 +4,8 @@ An Android App through which we can view and share memes with others .
 
 # Features
 
-- Used an API for generating a random meme images or gifs
-- Share memes 
+- Uses an API for generating a random meme images or gifs
+- Memes can be shared with others 
 
 # Tools & Technology Used
 
