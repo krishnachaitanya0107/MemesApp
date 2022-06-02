@@ -1,59 +1,54 @@
-package com.example.memesapp;
+package com.example.memesapp
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Context
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
+import com.example.memesapp.MySingleton
+import kotlin.jvm.Synchronized
+import android.graphics.Bitmap
+import com.android.volley.Request
+import com.android.volley.toolbox.ImageLoader
+import com.bumptech.glide.util.LruCache
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.util.LruCache;
-
-public class MySingleton {
-    private static MySingleton instance;
-    private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
-    private static Context ctx;
-
-    private MySingleton(Context context) {
-        ctx = context;
-        requestQueue = getRequestQueue();
-
-        imageLoader = new ImageLoader(requestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
-
-                    @Override
-                    public Bitmap getBitmap(String url) {
-                        return cache.get(url);
-                    }
-
-                    @Override
-                    public void putBitmap(String url, Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
-    }
-
-    public static synchronized MySingleton getInstance(Context context) {
-        if (instance == null) {
-            instance = new MySingleton(context);
-        }
-        return instance;
-    }
-
-    RequestQueue getRequestQueue() {
+class MySingleton private constructor(private var ctx: Context) {
+    private var requestQueue: RequestQueue?
+    private val imageLoader: ImageLoader
+    private fun getRequestQueue(): RequestQueue {
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
-            requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+            requestQueue = Volley.newRequestQueue(ctx.applicationContext)
         }
-        return requestQueue;
+        return requestQueue as RequestQueue
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    fun <T> addToRequestQueue(req: Request<T>?) {
+        getRequestQueue().add(req)
     }
 
+    companion object {
+        private var instance: MySingleton? = null
+        @Synchronized
+        fun getInstance(context: Context): MySingleton? {
+            if (instance == null) {
+                instance = MySingleton(context)
+            }
+            return instance
+        }
+    }
+
+    init {
+        requestQueue = getRequestQueue()
+        imageLoader = ImageLoader(requestQueue,
+            object : ImageLoader.ImageCache {
+                private val cache = LruCache<String, Bitmap>(20)
+                override fun getBitmap(url: String): Bitmap? {
+                    return cache[url]
+                }
+
+                override fun putBitmap(url: String, bitmap: Bitmap) {
+                    cache.put(url, bitmap)
+                }
+            })
+    }
 }
