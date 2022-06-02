@@ -8,11 +8,12 @@ An Android App which displays memes by getting data from a REST API .
 - Manages network requests without blocking the UI .
 - Follows singleton pattern to help reuse existing objects instead of creating new instances everytime .
 - Memes can be shared with others through an intent .
+- Memes can be downloaded as well .
 
 # Tools & Technology Used
 
 - Android studio
-- java
+- kotlin
 - Volley library
 - Glide library 
 - Rest API
